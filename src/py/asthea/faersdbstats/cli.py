@@ -13,15 +13,18 @@ import asthea.faersdbstats.reference as sr
 
 
 CREATE_SCHEMA_SQL = (
-    'ddl/create_schema.sql',
+    'ddl/create_00_schema.sql',
 )
 CREATE_SQL = (
-    'ddl/reference_create.sql',
-    'ddl/staging_faers_create.sql',
+    'ddl/create_10_reference.sql',
+    'ddl/create_20_staging_faers.sql',
+)
+DROP_SCHEMA_SQL = (
+    'ddl/drop_90_schema.sql',
 )
 DROP_SQL = (
-    'ddl/staging_faers_drop.sql',
-    'ddl/reference_drop.sql',
+    'ddl/drop_70_staging_faers.sql',
+    'ddl/drop_80_reference.sql',
 )
 
 
@@ -42,7 +45,7 @@ def execute_sql_resources(connection_info, resources):
                 cursor.execute(sql)
 
 
-# ---------------------------------------------------------------------- command
+# --------------------------------------------------------------------- commands
 @click.group()
 @click_log.simple_verbosity_option('')
 def run():
@@ -63,6 +66,22 @@ def create(database):
     log.info('Create database structure')
 
     execute_sql_resources(database, CREATE_SQL)
+
+
+@click.command()
+@click.argument('database')
+def drop_schema(database):
+    log.info('Drop database schemas')
+
+    execute_sql_resources(database, DROP_SCHEMA_SQL)
+
+
+@click.command()
+@click.argument('database')
+def drop(database):
+    log.info('Drop database structure')
+
+    execute_sql_resources(database, DROP_SQL)
 
 
 @click.command()
@@ -90,24 +109,20 @@ def load_faers(database, data_folder):
     sf.load(database, data_folder)
 
 
-@click.command()
-@click.argument('database')
-def drop(database):
-    log.info('Drop database structure')
-
-    execute_sql_resources(database, DROP_SQL)
-
-
 # ------------------------------------------------------------------------- main
 def main():
     log.debug('main()')
 
     run.add_command(create_schema)
+    run.add_command(drop_schema)
+
     run.add_command(create)
+    run.add_command(drop)
+
     run.add_command(download)
+
     run.add_command(load_reference)
     run.add_command(load_faers)
-    run.add_command(drop)
 
     run(obj={})
 
