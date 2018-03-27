@@ -9,16 +9,19 @@ import click_log
 from psycopg2 import connect
 
 import asthea.faersdbstats.stage_faers as sf
+import asthea.faersdbstats.reference as sr
 
 
 CREATE_SCHEMA_SQL = (
     'ddl/create_schema.sql',
 )
 CREATE_SQL = (
+    'ddl/reference_create.sql',
     'ddl/staging_faers_create.sql',
 )
 DROP_SQL = (
     'ddl/staging_faers_drop.sql',
+    'ddl/reference_drop.sql',
 )
 
 
@@ -72,6 +75,14 @@ def download(data_folder):
 
 @click.command()
 @click.argument('database')
+def load_reference(database):
+    log.info('Load reference data')
+
+    sr.load(database)
+
+
+@click.command()
+@click.argument('database')
 @click.argument('data_folder')
 def load_faers(database, data_folder):
     log.info('Load FAERS data')
@@ -94,6 +105,7 @@ def main():
     run.add_command(create_schema)
     run.add_command(create)
     run.add_command(download)
+    run.add_command(load_reference)
     run.add_command(load_faers)
     run.add_command(drop)
 
