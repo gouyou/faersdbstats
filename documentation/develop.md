@@ -23,6 +23,12 @@ faersdbstat load_faers 'host=<HOST> dbname=<DBNAME> user=<USER> password=<PASSWO
 faersdbstat deduplicate 'host=<HOST> dbname=<DBNAME> user=<USER> password=<PASSWORD>'
 ```
 
+## Notes on reference data
+
+### EU drugs
+Create a cross-walk table to map from EU drug name to active ingredient. 
+It is populated data from the EU community registry full active substances list.
+
 ## Notes on deduplication
 Transform the LAERS legacy demo data into the same format as the FAERS current
 data so we can combine demographic data across both databases and run logic to

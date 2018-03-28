@@ -15,6 +15,7 @@ def load(database):
 
     with psycopg2.connect(database) as connection:
         with connection.cursor() as cursor:
+            # ---------------------------------------------------- country codes
             log.info('Loading country codes data')
 
             cursor.execute('SET search_path = faers')
@@ -32,3 +33,21 @@ def load(database):
                 'asthea.faersdbstats', 'data/non_standard_country_codes.csv'
             )
             cursor.copy_expert(sql, BytesIO(data))
+
+            # --------------------------------------------------------- EU drugs
+            log.info('Loading EU drugs data')
+
+            sql = 'COPY eu_drug_name_active_ingredient ' \
+                  'FROM STDIN ' \
+                  'WITH CSV DELIMITER E\'\\t\' HEADER QUOTE E\'"\''
+
+            data = get_data(
+                'asthea.faersdbstats',
+                'data/EU_registered_drugs_by_active_ingredient_utf8.txt'
+            )
+            cursor.copy_expert(sql, BytesIO(data))
+
+            cursor.execute(
+                'REFRESH MATERIALIZED VIEW '
+                'eu_drug_name_active_ingredient_mapping;'
+            )
