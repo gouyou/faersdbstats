@@ -14,9 +14,9 @@ DROP MATERIALIZED VIEW IF EXISTS default_all_casedemo_event_dt_keys;
 DROP TABLE IF EXISTS all_casedemo;
 
 -- -----------------------------------------------------------------------------
-DROP MATERIALIZED VIEW IF EXISTS drugname_legacy_list;
-DROP MATERIALIZED VIEW IF EXISTS reac_pt_legacy_list;
 DROP MATERIALIZED VIEW IF EXISTS casedemo_legacy;
+DROP MATERIALIZED VIEW IF EXISTS reac_pt_legacy_list;
+DROP MATERIALIZED VIEW IF EXISTS drugname_legacy_list;
 
 -- -----------------------------------------------------------------------------
 DROP MATERIALIZED VIEW IF EXISTS casedemo;

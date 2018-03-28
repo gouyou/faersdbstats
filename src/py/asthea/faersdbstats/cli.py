@@ -24,6 +24,7 @@ DROP_SCHEMA_SQL = (
     'ddl/drop_90_schema.sql',
 )
 DROP_SQL = (
+    'ddl/drop_60_deduplication.sql',
     'ddl/drop_70_staging_faers.sql',
     'ddl/drop_80_reference.sql',
 )
