@@ -8,8 +8,8 @@ import click_log
 
 from psycopg2 import connect
 
-import asthea.faersdbstats.stage_faers as sf
-import asthea.faersdbstats.reference as sr
+from asthea.faersdbstats import stage_faers
+from asthea.faersdbstats import reference
 
 
 CREATE_SCHEMA_SQL = (
@@ -18,6 +18,7 @@ CREATE_SCHEMA_SQL = (
 CREATE_SQL = (
     'ddl/create_10_reference.sql',
     'ddl/create_20_staging_faers.sql',
+    'ddl/create_30_deduplication.sql',
 )
 DROP_SCHEMA_SQL = (
     'ddl/drop_90_schema.sql',
@@ -25,6 +26,10 @@ DROP_SCHEMA_SQL = (
 DROP_SQL = (
     'ddl/drop_70_staging_faers.sql',
     'ddl/drop_80_reference.sql',
+)
+
+DEDUPLICATE_SQL = (
+    'sql/process_31_deduplication.sql',
 )
 
 
@@ -89,7 +94,7 @@ def drop(database):
 def download(data_folder):
     log.info('Downloading to {}'.format(data_folder))
 
-    sf.download(data_folder)
+    stage_faers.download(data_folder)
 
 
 @click.command()
@@ -97,7 +102,7 @@ def download(data_folder):
 def load_reference(database):
     log.info('Load reference data')
 
-    sr.load(database)
+    reference.load(database)
 
 
 @click.command()
@@ -106,7 +111,15 @@ def load_reference(database):
 def load_faers(database, data_folder):
     log.info('Load FAERS data')
 
-    sf.load(database, data_folder)
+    stage_faers.load(database, data_folder)
+
+
+@click.command()
+@click.argument('database')
+def deduplicate(database):
+    log.info('Deduplicate FAERS cases')
+
+    execute_sql_resources(database, DEDUPLICATE_SQL)
 
 
 # ------------------------------------------------------------------------- main
@@ -123,6 +136,8 @@ def main():
 
     run.add_command(load_reference)
     run.add_command(load_faers)
+
+    run.add_command(deduplicate)
 
     run(obj={})
 

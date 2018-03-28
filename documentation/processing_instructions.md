@@ -53,3 +53,5 @@ faersdbstat load_reference 'host=<HOST> dbname=<DBNAME> user=<USER> password=<PA
 ```bash
 faersdbstat load_faers 'host=<HOST> dbname=<DBNAME> user=<USER> password=<PASSWORD>' data
 ```
+
+### Deduplicate case data
