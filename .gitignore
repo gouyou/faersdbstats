@@ -1,0 +1,7 @@
+data/
+# python
+*.pyc
+__pycache__/
+*.egg-info/
+# development tools
+.idea/
