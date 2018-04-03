@@ -22,6 +22,7 @@ setup(
     },
 
     install_requires=[
+        'beautifulsoup4',
         'Click', 'click_log',
         'psycopg2',
         'requests'

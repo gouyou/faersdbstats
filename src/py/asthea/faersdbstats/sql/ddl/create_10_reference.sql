@@ -26,3 +26,26 @@ CREATE MATERIALIZED VIEW eu_drug_name_active_ingredient_mapping AS
         upper(active_substance) <> 'NOT APPLICABLE' AND brand_name IS NOT NULL
   ORDER BY 1, 2
 WITH NO DATA;
+
+-- -----------------------------------------------------------------------------
+CREATE TABLE nda
+(
+  ingredient          VARCHAR,
+  dfroute             VARCHAR,
+  trade_name          VARCHAR,
+  applicant           VARCHAR,
+  strength            VARCHAR,
+  appl_type           VARCHAR,
+  appl_no             VARCHAR,
+  product_no          VARCHAR,
+  te_code             VARCHAR,
+  approval_date       VARCHAR,
+  rld                 VARCHAR,
+  rs                  VARCHAR,
+  type                VARCHAR,
+  applicant_full_name VARCHAR,
+  drug_form           VARCHAR,
+  route               VARCHAR
+);
+CREATE INDEX nda_ingredient_ix
+  ON nda (appl_no, ingredient);

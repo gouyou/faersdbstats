@@ -59,6 +59,7 @@ def run():
     pass
 
 
+# -------------------------------------------------------------------- DDLs ----
 @click.command()
 @click.argument('database')
 def create_schema(database):
@@ -91,20 +92,52 @@ def drop(database):
     execute_sql_resources(database, DROP_SQL)
 
 
+# ---------------------------------------------------------------- download ----
 @click.command()
 @click.argument('data_folder')
 def download(data_folder):
     log.info('Downloading to {}'.format(data_folder))
 
+    reference.download_orange_book(data_folder)
     stage_faers.download(data_folder)
 
 
 @click.command()
+@click.argument('data_folder')
+def download_reference(data_folder):
+    log.info('Downloading reference data to {}'.format(data_folder))
+
+    reference.download_orange_book(data_folder)
+
+
+@click.command()
+@click.argument('data_folder')
+def download_faers(data_folder):
+    log.info('Downloading FAERS data to {}'.format(data_folder))
+
+    stage_faers.download(data_folder)
+
+
+# -------------------------------------------------------------------- load ----
+@click.command()
 @click.argument('database')
-def load_reference(database):
+@click.argument('data_folder')
+def load(database, data_folder):
+    log.info('Load data')
+
+    reference.load_included(database)
+    reference.load_orange_book(database, data_folder)
+    stage_faers.load(database, data_folder)
+
+
+@click.command()
+@click.argument('database')
+@click.argument('data_folder')
+def load_reference(database, data_folder):
     log.info('Load reference data')
 
-    reference.load(database)
+    reference.load_included(database)
+    reference.load_orange_book(database, data_folder)
 
 
 @click.command()
@@ -116,6 +149,7 @@ def load_faers(database, data_folder):
     stage_faers.load(database, data_folder)
 
 
+# ----------------------------------------------------------------- process ----
 @click.command()
 @click.argument('database')
 def deduplicate(database):
@@ -135,7 +169,10 @@ def main():
     run.add_command(drop)
 
     run.add_command(download)
+    run.add_command(download_reference)
+    run.add_command(download_faers)
 
+    run.add_command(load)
     run.add_command(load_reference)
     run.add_command(load_faers)
 
