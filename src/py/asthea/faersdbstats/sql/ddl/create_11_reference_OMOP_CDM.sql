@@ -35,6 +35,8 @@ Authors:  Patrick Ryan, Christian Reich, Clair Blacketer
 
 *************************/
 
+SET search_path = cdmv5;
+
 
 /************************
 
