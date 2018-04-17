@@ -13,27 +13,27 @@ from asthea.faersdbstats import reference
 
 
 CREATE_SCHEMA_SQL = (
-    'sql/ddl/create_00_schema.sql',
+    'sql/ddl/00_create_schema.sql',
 )
 CREATE_SQL = (
-    'sql/ddl/create_10_reference.sql',
-    'sql/ddl/create_11_reference_OMOP_CDM.sql',
-    'sql/ddl/create_20_staging_faers.sql',
-    'sql/ddl/create_30_deduplication.sql',
+    'sql/ddl/10_create_reference.sql',
+    'sql/ddl/11_create_reference_OMOP_CDM.sql',
+    'sql/ddl/12_create_staging_faers.sql',
+    'sql/ddl/20_create_deduplication.sql',
 )
 
 DROP_SCHEMA_SQL = (
-    'sql/ddl/drop_90_schema.sql',
+    'sql/ddl/99_drop_schema.sql',
 )
 DROP_SQL = (
-    'sql/ddl/drop_60_deduplication.sql',
-    'sql/ddl/drop_70_staging_faers.sql',
-    'sql/ddl/drop_79_reference_OMOP_CDM.sql',
-    'sql/ddl/drop_80_reference.sql',
+    'sql/ddl/79_drop_deduplication.sql',
+    'sql/ddl/87_drop_staging_faers.sql',
+    'sql/ddl/88_drop_reference_OMOP_CDM.sql',
+    'sql/ddl/89_drop_reference.sql',
 )
 
 DEDUPLICATE_SQL = (
-    'sql/process_31_deduplication.sql',
+    'sql/30_process_deduplication.sql',
 )
 
 
