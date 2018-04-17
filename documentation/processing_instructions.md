@@ -38,6 +38,14 @@ mkdir data
 faersdbstat download data
 ```
 
+Download the OHDSI CDM v5 vocabulary from the
+[OHDSI Athena Website](http://athena.ohdsi.org/). On the Athena website
+vocabulary download page keep the pre-selected vocabularies and also select the
+MedDRA vocabulary (you might need a subscription for
+[MedDRA](https://www.meddra.org/)). The downloaded file should be placed in the
+download folder you are using (`data`) and be named
+`vocabulary_download_v5_<...>.zip`.
+
 ### Create database structures
 ```bash
 faersdbstat create_schema 'host=<HOST> dbname=<DBNAME> user=<USER> password=<PASSWORD>'
@@ -46,7 +54,7 @@ faersdbstat create 'host=<HOST> dbname=<DBNAME> user=<USER> password=<PASSWORD>'
 
 ### Load Reference data
 ```bash
-faersdbstat load_reference 'host=<HOST> dbname=<DBNAME> user=<USER> password=<PASSWORD>'
+faersdbstat load_reference 'host=<HOST> dbname=<DBNAME> user=<USER> password=<PASSWORD>' data
 ```
 
 ### Load legacy AERS and FAERS data

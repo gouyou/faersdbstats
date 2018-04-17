@@ -129,6 +129,7 @@ def load(database, data_folder):
 
     reference.load_included(database)
     reference.load_orange_book(database, data_folder)
+    reference.load_cdm_vocabulary(database, data_folder)
     stage_faers.load(database, data_folder)
 
 
@@ -140,6 +141,7 @@ def load_reference(database, data_folder):
 
     reference.load_included(database)
     reference.load_orange_book(database, data_folder)
+    reference.load_cdm_vocabulary(database, data_folder)
 
 
 @click.command()

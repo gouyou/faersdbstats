@@ -1,8 +1,11 @@
 __author__ = 'Guillaume Taglang <guillaume@asthea.com>'
 
+import errno
+import glob
 from io import BytesIO
 import logging
 import os.path
+import os
 from pkgutil import get_data
 from urllib.parse import urljoin
 from zipfile import ZipFile
@@ -145,3 +148,49 @@ def load_orange_book(database, data_folder):
                               'dfroute FROM \';(.*)\'' \
                               ');'
                         cursor.execute(sql)
+
+
+def load_cdm_vocabulary(database, data_folder):
+    log.debug('load_cdm_vocabulary()')
+
+    filename = os.path.join(data_folder, 'vocabulary_download_v5_*.zip')
+    filenames = glob.glob(filename)
+
+    if len(filenames) == 0:
+        msg = 'Couldn''t find CDM vocabulary file.'
+        log.error(msg)
+        raise FileNotFoundError(errno.ENOENT, msg, filename)
+    elif len(filenames) > 1:
+        msg = 'Multiple CDM vocabulary files.'
+        log.error(msg)
+        raise FileNotFoundError(errno.ENOENT, msg, filename)
+
+    with ZipFile(filenames[0]) as z:
+        log.info('Processing {}'.format(z.filename))
+
+        for tablename in [
+            'DRUG_STRENGTH',
+            'CONCEPT',
+            'CONCEPT_RELATIONSHIP',
+            'CONCEPT_ANCESTOR',
+            'CONCEPT_SYNONYM',
+            'VOCABULARY',
+            'RELATIONSHIP',
+            'CONCEPT_CLASS',
+            'DOMAIN'
+        ]:
+            with z.open(tablename + '.csv') as f:
+                log.debug('Loading {}'.format(tablename))
+                header = f.readline()
+                log.debug(header)
+                data = f.read()
+
+                with psycopg2.connect(database) as connection:
+                    with connection.cursor() as cursor:
+                        cursor.execute('SET search_path = cdmv5')
+
+                        sql = 'COPY {} ' \
+                              'FROM STDIN ' \
+                              'WITH CSV DELIMITER E\'\\t\' QUOTE E\'\\b\''
+                        sql = sql.format(tablename)
+                        cursor.copy_expert(sql, BytesIO(data))
